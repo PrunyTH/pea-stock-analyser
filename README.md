@@ -4,6 +4,45 @@ A transparent stock-analysis framework designed to compare PEA / PEA-PME eligibl
 microcaps, initially focused on autonomous systems, robotics, drones, AI infrastructure
 and energy storage.
 
+## Free local dashboard
+
+The project includes a Streamlit dashboard and is designed to run **locally for free**.
+No paid Streamlit subscription is required.
+
+Install the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then launch the dashboard:
+
+```bash
+streamlit run app.py
+```
+
+Your browser will open the local interface, normally at:
+
+```text
+http://localhost:8501
+```
+
+The dashboard currently shows:
+
+- company description,
+- recent share-price action when Yahoo Finance data is available,
+- market cap,
+- revenue and forward revenue growth,
+- gross margin,
+- P/S and EV/Sales,
+- cash/debt position,
+- forward EBITDA and EBITDA margin,
+- quantitative score,
+- autonomy exposure,
+- dilution/liquidity score,
+- overall thesis score,
+- comparison with all reviewed companies.
+
 ## Why this exists
 
 The goal is not to find the company with the lowest share price. It is to identify
@@ -39,7 +78,7 @@ Every scoring component is transformed so **higher = better**.
 The exact normalisation ranges live in `ScoreConfig`, so they are easy to change
 and later back-test.
 
-## Usage
+## Command-line usage
 
 ```bash
 python stock_ranker.py
