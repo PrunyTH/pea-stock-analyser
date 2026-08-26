@@ -8,10 +8,11 @@ from stock_ranker import load_companies, rank
 
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / "data" / "companies.csv"
+ICON_FILE = BASE_DIR / "assets" / "pea_stock_analyser_fixed_small.ico"
 
 st.set_page_config(
     page_title="PEA Stock Analyser",
-    page_icon="📈",
+    page_icon=str(ICON_FILE),
     layout="wide",
 )
 
@@ -235,7 +236,7 @@ st.dataframe(
         }
     ),
     hide_index=True,
-    use_container_width=True,
+    width="stretch",
 )
 
 st.caption(
