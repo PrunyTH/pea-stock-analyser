@@ -7,14 +7,6 @@ initially focused on autonomous systems, robotics, drones, AI infrastructure
 and energy storage.
 
 Higher score is always better.
-
-This module deliberately separates:
-1. Raw financial/company data
-2. Quantitative scoring
-3. Thesis adjustments
-4. Historical snapshots
-
-The goal is to keep the model simple enough to audit and improve over time.
 """
 
 from __future__ import annotations
@@ -38,12 +30,13 @@ class Company:
     debt_m: float
     gross_margin: float
     ebitda_forward_m: Optional[float]
-
     autonomy_exposure: float
     dilution_liquidity_quality: float
     pea_eligible: str = ""
     broker_access: str = ""
     note: str = ""
+    description: str = ""
+    yahoo_ticker: str = ""
 
 
 @dataclass
@@ -61,19 +54,14 @@ class ScoreConfig:
 
     revenue_growth_worst: float = -0.50
     revenue_growth_best: float = 0.50
-
     gross_margin_worst: float = 0.00
     gross_margin_best: float = 0.70
-
     net_cash_to_mcap_worst: float = -0.50
     net_cash_to_mcap_best: float = 0.25
-
     ps_worst: float = 4.00
     ps_best: float = 0.50
-
     ev_sales_worst: float = 4.00
     ev_sales_best: float = 0.50
-
     ebitda_margin_worst: float = -0.20
     ebitda_margin_best: float = 0.20
 
@@ -102,34 +90,30 @@ def analyse(company: Company, cfg: ScoreConfig = ScoreConfig()) -> dict:
 
     net_cash = company.cash_m - company.debt_m
     enterprise_value = company.market_cap_m + company.debt_m - company.cash_m
-
     ps = company.market_cap_m / company.revenue_m
     ev_sales = enterprise_value / company.revenue_m
     net_cash_to_mcap = net_cash / company.market_cap_m
 
-    if company.revenue_forward_m is not None:
-        revenue_growth = company.revenue_forward_m / company.revenue_m - 1.0
-    else:
-        revenue_growth = None
+    revenue_growth = (
+        company.revenue_forward_m / company.revenue_m - 1.0
+        if company.revenue_forward_m is not None
+        else None
+    )
 
-    if (
-        company.ebitda_forward_m is not None
+    ebitda_margin = (
+        company.ebitda_forward_m / company.revenue_forward_m
+        if company.ebitda_forward_m is not None
         and company.revenue_forward_m
         and company.revenue_forward_m != 0
-    ):
-        ebitda_margin = company.ebitda_forward_m / company.revenue_forward_m
-    else:
-        ebitda_margin = None
+        else None
+    )
 
     component_scores = {
-        "growth_score": (
-            higher_is_better(revenue_growth, cfg.revenue_growth_worst, cfg.revenue_growth_best)
-            if revenue_growth is not None else 50.0
-        ),
+        "growth_score": higher_is_better(
+            revenue_growth, cfg.revenue_growth_worst, cfg.revenue_growth_best
+        ) if revenue_growth is not None else 50.0,
         "gross_margin_score": higher_is_better(
-            company.gross_margin,
-            cfg.gross_margin_worst,
-            cfg.gross_margin_best,
+            company.gross_margin, cfg.gross_margin_worst, cfg.gross_margin_best
         ),
         "balance_sheet_score": higher_is_better(
             net_cash_to_mcap,
@@ -137,11 +121,14 @@ def analyse(company: Company, cfg: ScoreConfig = ScoreConfig()) -> dict:
             cfg.net_cash_to_mcap_best,
         ),
         "ps_score": lower_is_better(ps, cfg.ps_worst, cfg.ps_best),
-        "ev_sales_score": lower_is_better(ev_sales, cfg.ev_sales_worst, cfg.ev_sales_best),
-        "ebitda_margin_score": (
-            higher_is_better(ebitda_margin, cfg.ebitda_margin_worst, cfg.ebitda_margin_best)
-            if ebitda_margin is not None else 50.0
+        "ev_sales_score": lower_is_better(
+            ev_sales, cfg.ev_sales_worst, cfg.ev_sales_best
         ),
+        "ebitda_margin_score": higher_is_better(
+            ebitda_margin,
+            cfg.ebitda_margin_worst,
+            cfg.ebitda_margin_best,
+        ) if ebitda_margin is not None else 50.0,
     }
 
     quant_score = (
@@ -200,6 +187,8 @@ def load_companies(path: str | Path) -> list[Company]:
                     pea_eligible=row.get("pea_eligible", ""),
                     broker_access=row.get("broker_access", ""),
                     note=row.get("note", ""),
+                    description=row.get("description", ""),
+                    yahoo_ticker=row.get("yahoo_ticker", ""),
                 )
             )
     return companies
