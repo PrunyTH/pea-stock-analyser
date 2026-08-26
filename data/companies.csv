@@ -1,0 +1,4 @@
+name,ticker,theme,market_cap_m,revenue_m,revenue_forward_m,cash_m,debt_m,gross_margin,ebitda_forward_m,autonomy_exposure,dilution_liquidity_quality,pea_eligible,broker_access,note
+Arcure,ALCUR,Industrial AI perception / robotics,15.0,12.627,15.0,3.23,7.96,0.56,2.40,40,70,Yes,Euronext Paris / Fortuneo,OEM growth potential but not pure autonomy
+Drone Volt,ALDRV,Autonomous / industrial drones,30.0,8.70,12.0,8.0,2.4,0.44,-2.0,80,25,Yes / PEA-PME,Euronext Growth Paris / Fortuneo,Strong thematic fit but dilution risk
+KebNi,KEBNI.B,Inertial navigation / autonomy enabler,26.01,8.85,11.66,0.0,0.649,0.4784,0.633,70,55,Yes,Fortuneo access to verify,Autonomy enabling technology; current operating weakness
