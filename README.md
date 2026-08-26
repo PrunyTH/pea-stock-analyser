@@ -9,9 +9,27 @@ and energy storage.
 The project includes a Streamlit dashboard and is designed to run **locally for free**.
 No paid Streamlit subscription is required.
 
-The current dashboard shows:
+Install the dependencies:
 
-- company description / thesis,
+```bash
+pip install -r requirements.txt
+```
+
+Then launch the dashboard:
+
+```bash
+streamlit run app.py
+```
+
+Your browser will open the local interface, normally at:
+
+```text
+http://localhost:8501
+```
+
+The dashboard currently shows:
+
+- company description,
 - recent share-price action when Yahoo Finance data is available,
 - market cap,
 - revenue and forward revenue growth,
@@ -25,69 +43,15 @@ The current dashboard shows:
 - overall thesis score,
 - comparison with all reviewed companies.
 
-### 1. Clone the repository
+## Desktop icon
 
-```bash
-git clone https://github.com/PrunyTH/pea-stock-analyser.git
-cd pea-stock-analyser
-```
-
-### 2. Create a virtual environment
-
-Windows PowerShell:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
-
-Windows Command Prompt:
-
-```cmd
-python -m venv .venv
-.venv\Scripts\activate.bat
-```
-
-macOS / Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### 3. Install the dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-The current dependencies are free/open-source:
-
-- Streamlit
-- pandas
-- yfinance
-
-No paid API key is required.
-
-### 4. Start the dashboard
-
-```bash
-streamlit run app.py
-```
-
-The interface will open in your browser, normally at:
+A Windows shortcut icon is included at:
 
 ```text
-http://localhost:8501
+assets/pea_stock_analyser.ico
 ```
 
-Everything runs locally on your computer. Closing the terminal stops the dashboard.
-
-### Price data
-
-Recent price history is requested through the free `yfinance` Python package. Yahoo Finance data can occasionally be delayed, unavailable or rate-limited. If that happens, the dashboard still loads and displays the stored fundamental analysis and ranking.
-
-The stock-analysis tool therefore does **not** depend on a paid data subscription to function.
+After pulling the latest version, point the desktop shortcut to this file from **Properties > Change Icon**.
 
 ## Why this exists
 
@@ -151,7 +115,7 @@ the metrics and score at that point in time. This will eventually allow us to co
 
 ## Planned improvements
 
-- Automated market-price retrieval and caching
+- Automated market-price retrieval
 - Separate historical fundamentals from forward estimates
 - Source URLs and source dates per metric
 - Revenue CAGR
@@ -162,7 +126,7 @@ the metrics and score at that point in time. This will eventually allow us to co
 - Recurring revenue percentage
 - Insider ownership
 - Order backlog / revenue
-- Benchmark performance versus the existing PEA ETF
+- Benchmark performance vs the existing PEA ETF
 - Back-testing of alternative scoring weights
 - Sector-specific scoring profiles
 - Automated monthly snapshots
